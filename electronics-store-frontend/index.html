@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ElectroMart</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Font Awesome for cart icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">ElectroMart</div>
+    <input type="text" placeholder="Search electronics..." id="searchBar" />
+    <div class="cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="cartCount">0</span>
+    </div>
+    <!-- View Cart Button -->
+    <button onclick="showCart()" id="viewCartBtn">View Cart</button>
+  </header>
+
+  <main>
+    <h2>Featured Products</h2>
+    <div id="productGrid" class="product-grid"></div>
+  </main>
+
+  <!-- Product View Modal -->
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <img id="modalImage" src="" alt="Product Image" />
+      <h2 id="modalName"></h2>
+      <p id="modalDescription"></p>
+      <p><strong>Price:</strong> $<span id="modalPrice"></span></p>
+      <button onclick="addToCartFromModal()">
+        <i class="fas fa-shopping-cart"></i> Add to Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeCart()">&times;</span>
+      <h2>Your Cart</h2>
+      <ul id="cartItems"></ul>
+      <p><strong>Total:</strong> $<span id="cartTotal">0.00</span></p>
+      <button onclick="checkoutCart()">Checkout</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
