@@ -5,7 +5,7 @@ window.onload = async () => {
   const productGrid = document.getElementById("productGrid");
 
   try {
-    const response = await fetch("http://localhost:5000/api/products");
+    const response = await fetch("https://electromart-backend-hgrv.onrender.com/api/products");
     const products = await response.json();
 
     products.forEach(product => {
@@ -36,6 +36,10 @@ window.onload = async () => {
   }
 };
 
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("productModal").style.display = "none";
+};
+
 function addToCartFromModal() {
   if (selectedProduct) {
     cart.push(selectedProduct);
@@ -43,10 +47,6 @@ function addToCartFromModal() {
     alert(`${selectedProduct.name} added to cart!`);
   }
 }
-
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("productModal").style.display = "none";
-};
 
 function showCart() {
   const cartItemsList = document.getElementById("cartItems");
@@ -75,5 +75,31 @@ function closeCart() {
 }
 
 function checkoutCart() {
-  alert("Checkout process started... (we’ll build this in Feature 4)");
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  document.getElementById("cartModal").style.display = "none";
+  document.getElementById("thankYouModal").style.display = "flex";
+
+  // Clear cart
+  cart = [];
+  document.getElementById("cartCount").textContent = "0";
+  document.getElementById("cartItems").innerHTML = "";
+  document.getElementById("cartTotal").textContent = "0.00";
 }
+
+function closeThankYou() {
+  document.getElementById("thankYouModal").style.display = "none";
+}
+
+document.getElementById("searchBar").addEventListener("input", function (e) {
+  const query = e.target.value.toLowerCase();
+  const productCards = document.querySelectorAll(".product-card");
+
+  productCards.forEach(card => {
+    const name = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = name.includes(query) ? "block" : "none";
+  });
+});

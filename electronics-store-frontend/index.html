@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ElectroMart</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Font Awesome for cart icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
@@ -17,7 +15,6 @@
       <i class="fas fa-shopping-cart"></i>
       <span id="cartCount">0</span>
     </div>
-    <!-- View Cart Button -->
     <button onclick="showCart()" id="viewCartBtn">View Cart</button>
   </header>
 
@@ -48,6 +45,15 @@
       <ul id="cartItems"></ul>
       <p><strong>Total:</strong> $<span id="cartTotal">0.00</span></p>
       <button onclick="checkoutCart()">Checkout</button>
+    </div>
+  </div>
+
+  <!-- ✅ Thank You Modal -->
+  <div class="modal" id="thankYouModal" style="display: none;">
+    <div class="modal-content">
+      <h2>✅ Thank you for your order!</h2>
+      <p>We’ll get it delivered to you as soon as possible.</p>
+      <button onclick="closeThankYou()">Close</button>
     </div>
   </div>
 
