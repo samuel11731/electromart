@@ -27,23 +27,14 @@ header {
   font-weight: bold;
 }
 
-input[type="text"] {
+#searchBar {
   width: 40%;
   padding: 8px;
   border-radius: 4px;
   border: none;
 }
 
-/* Cart Icon & View Cart Button */
-.cart-icon {
-  font-size: 1.2em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 10px;
-}
-
+#loginBtn,
 #viewCartBtn {
   background-color: #007bff;
   color: white;
@@ -52,6 +43,23 @@ input[type="text"] {
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
+  margin-left: 10px;
+}
+
+.cart-icon {
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* "Logged in as ..." */
+#userStatus {
+  font-weight: bold;
+  font-size: 15px;
+  color: lightgreen;
+  margin-left: 10px;
 }
 
 /* Main */
@@ -95,7 +103,7 @@ main {
   margin-top: 8px;
 }
 
-/* Modal (Product & Cart) */
+/* Modal Styles */
 .modal {
   display: none;
   position: fixed;
@@ -134,20 +142,6 @@ main {
   color: #444;
 }
 
-/* Cart List */
-#cartItems {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-#cartItems li {
-  padding: 6px 0;
-  border-bottom: 1px solid #ccc;
-}
-
-/* Modal Buttons */
 .modal-content button {
   background-color: #28a745;
   color: white;
@@ -163,6 +157,35 @@ main {
   background-color: #218838;
 }
 
+/* Cart */
+#cartItems {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+#cartItems li {
+  padding: 6px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Login & Signup Form Inputs */
+.modal-content input {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+/* Status message */
+#loginStatus,
+#signupStatus {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   header {
@@ -170,11 +193,12 @@ main {
     align-items: flex-start;
   }
 
-  input[type="text"] {
+  #searchBar {
     width: 100%;
     margin: 10px 0;
   }
 
+  #loginBtn,
   #viewCartBtn {
     width: 100%;
     margin-top: 10px;
