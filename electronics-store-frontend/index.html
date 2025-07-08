@@ -12,15 +12,13 @@
     <div class="logo">ElectroMart</div>
     <input type="text" placeholder="Search electronics..." id="searchBar" />
 
-    <div class="cart-icon">
-      <i class="fas fa-shopping-cart"></i>
-      <span id="cartCount">0</span>
+    <div class="action-box">
+      <span id="loginBtn">Login</span>
+      <span id="logoutBtn" style="display: none;">Logout</span>
+      <span id="myOrdersBtn" style="display: none;">My Orders</span>
+      <span onclick="showCart()" id="viewCartBtn">View Cart</span>
+      <span id="cartIcon"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></span>
     </div>
-
-    <button onclick="showCart()" id="viewCartBtn">View Cart</button>
-    <button id="myOrdersBtn" style="display: none;">My Orders</button>
-    <button onclick="showLogin()" id="loginBtn">Login</button>
-    <button onclick="logoutUser()" id="logoutBtn" style="display:none;">Logout</button>
   </header>
 
   <main>
@@ -103,3 +101,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
