@@ -14,47 +14,66 @@ window.onload = async () => {
     document.getElementById("myOrdersBtn").style.display = "inline-block";
   }
 
+  // ✅ Attach event listeners after DOM is ready
+  document.getElementById("loginForm").addEventListener("submit", handleLogin);
+  document.getElementById("signupForm").addEventListener("submit", handleSignup);
+  document.getElementById("myOrdersBtn").addEventListener("click", showMyOrders);
+  document.getElementById("searchBar").addEventListener("input", handleSearch);
+  document.getElementById("closeModal").onclick = () => {
+    document.getElementById("productModal").style.display = "none";
+  };
+
+  // ✅ Load and display products
   try {
     const response = await fetch("https://electromart-backend-hgrv.onrender.com/api/products");
+    if (!response.ok) throw new Error("Failed to load products");
     const products = await response.json();
-
-    products.forEach(product => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${product.image}" alt="${product.name}" />
-        <h3>${product.name}</h3>
-        <p>$${product.price}</p>
-        <button>View</button>
-      `;
-
-      const viewBtn = card.querySelector("button");
-      viewBtn.addEventListener("click", () => {
-        selectedProduct = product;
-        document.getElementById("modalImage").src = product.image;
-        document.getElementById("modalName").textContent = product.name;
-        document.getElementById("modalDescription").textContent = product.description;
-        document.getElementById("modalPrice").textContent = product.price;
-        document.getElementById("productModal").style.display = "flex";
-      });
-
-      productGrid.appendChild(card);
-    });
+    products.forEach(renderProductCard);
   } catch (error) {
-    console.error("Failed to load products", error);
-    productGrid.innerHTML = "<p>Error loading products.</p>";
+    console.error("Product load error:", error);
+    productGrid.innerHTML = "<p>Failed to load products.</p>";
   }
 };
 
-// Modal close
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("productModal").style.display = "none";
-};
+// ✅ Render one product card
+function renderProductCard(product) {
+  const productGrid = document.getElementById("productGrid");
 
-// Add to cart
+  const card = document.createElement("div");
+  card.className = "product-card";
+  card.innerHTML = `
+    <img src="${product.image}" alt="${product.name}" />
+    <h3>${product.name}</h3>
+    <p>$${product.price}</p>
+    <button>View</button>
+  `;
+
+  card.querySelector("button").addEventListener("click", () => {
+    selectedProduct = product;
+    document.getElementById("modalImage").src = product.image;
+    document.getElementById("modalName").textContent = product.name;
+    document.getElementById("modalDescription").textContent = product.description;
+    document.getElementById("modalPrice").textContent = product.price;
+    document.getElementById("productModal").style.display = "flex";
+  });
+
+  productGrid.appendChild(card);
+}
+
+// ✅ Search filtering
+function handleSearch(e) {
+  const query = e.target.value.toLowerCase();
+  const productCards = document.querySelectorAll(".product-card");
+
+  productCards.forEach(card => {
+    const name = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = name.includes(query) ? "block" : "none";
+  });
+}
+
+// ✅ Add to cart
 function addToCartFromModal() {
   if (!localStorage.getItem("token")) return showLogin("Please log in before adding to cart.");
-
   if (selectedProduct) {
     cart.push({ ...selectedProduct, quantity: 1 });
     document.getElementById("cartCount").textContent = cart.length;
@@ -62,14 +81,13 @@ function addToCartFromModal() {
   }
 }
 
-// Show cart
+// ✅ Show cart modal
 function showCart() {
   if (!localStorage.getItem("token")) return showLogin("Please log in to view your cart.");
-
   const cartItemsList = document.getElementById("cartItems");
   const cartTotalSpan = document.getElementById("cartTotal");
-  cartItemsList.innerHTML = "";
 
+  cartItemsList.innerHTML = "";
   let total = 0;
 
   if (cart.length === 0) {
@@ -91,10 +109,9 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-// ✅ Checkout with order saving
+// ✅ Checkout and save order
 async function checkoutCart() {
   if (cart.length === 0) return alert("Your cart is empty.");
-
   const token = localStorage.getItem("token");
   if (!token) return showLogin("Please log in to place your order.");
 
@@ -139,18 +156,7 @@ function closeThankYou() {
   document.getElementById("thankYouModal").style.display = "none";
 }
 
-// Search filter
-document.getElementById("searchBar").addEventListener("input", function (e) {
-  const query = e.target.value.toLowerCase();
-  const productCards = document.querySelectorAll(".product-card");
-
-  productCards.forEach(card => {
-    const name = card.querySelector("h3").textContent.toLowerCase();
-    card.style.display = name.includes(query) ? "block" : "none";
-  });
-});
-
-// Show login modal
+// ✅ Show login modal
 function showLogin(error = "") {
   document.getElementById("loginModal").style.display = "flex";
   document.getElementById("loginStatus").textContent = error;
@@ -166,7 +172,8 @@ function closeSignup() {
   document.getElementById("signupStatus").textContent = "";
 }
 
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
+// ✅ Login handler
+async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
@@ -202,11 +209,11 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   } catch (error) {
     statusText.textContent = "Server error.";
   }
-});
+}
 
-document.getElementById("signupForm").addEventListener("submit", async function (e) {
+// ✅ Signup handler
+async function handleSignup(e) {
   e.preventDefault();
-
   const username = document.getElementById("signupUsername").value.trim();
   const email = document.getElementById("signupEmail").value.trim();
   const password = document.getElementById("signupPassword").value.trim();
@@ -220,7 +227,6 @@ document.getElementById("signupForm").addEventListener("submit", async function 
     });
 
     const data = await res.json();
-
     if (res.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", username);
@@ -236,10 +242,10 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   } catch (error) {
     statusText.textContent = "Server error.";
   }
-});
+}
 
-// ✅ My Orders
-document.getElementById("myOrdersBtn").addEventListener("click", async () => {
+// ✅ Show orders
+async function showMyOrders() {
   const token = localStorage.getItem("token");
   if (!token) return showLogin("Please log in to view your orders.");
 
@@ -268,7 +274,7 @@ document.getElementById("myOrdersBtn").addEventListener("click", async () => {
   } catch (error) {
     orderList.innerHTML = "<li>Error fetching orders.</li>";
   }
-});
+}
 
 function closeOrdersModal() {
   document.getElementById("ordersModal").style.display = "none";
