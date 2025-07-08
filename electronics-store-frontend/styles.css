@@ -1,43 +1,45 @@
+/* General Styles */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
 }
 
 header {
-  background-color: #1a1a1a;
+  background-color: #333;
   color: white;
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
 }
 
 header input[type="text"] {
-  flex-grow: 1;
-  max-width: 250px;
   padding: 8px;
   margin: 10px;
+  width: 200px;
+  max-width: 100%;
 }
 
 header button {
   margin: 5px;
   padding: 8px 12px;
-  background-color: #007bff; /* ← Bootstrap blue */
+  background-color: #444;
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 header button:hover {
-  background-color: #0056b3;
+  background-color: #555;
 }
 
 .cart-icon {
@@ -46,39 +48,43 @@ header button:hover {
 }
 
 .cart-icon i {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .cart-icon span {
   position: absolute;
   top: -8px;
-  right: -10px;
+  right: -8px;
   background: red;
   color: white;
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 50%;
+}
+
+/* Product Grid */
+main {
+  padding: 20px;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  padding: 20px;
 }
 
 .product-card {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 6px;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
 }
 
 .product-card h3 {
@@ -88,120 +94,86 @@ header button:hover {
 
 .product-card p {
   font-size: 16px;
-  color: #333;
+  margin: 5px 0;
 }
 
 .product-card button {
   margin-top: 10px;
-  padding: 8px 12px;
-  background-color: #007bff;
+  padding: 6px 12px;
+  background-color: #28a745;
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .product-card button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
 /* Modals */
 .modal {
   display: none;
   position: fixed;
-  z-index: 10;
+  z-index: 999;
   left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
   align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
   background-color: white;
   padding: 20px;
-  border-radius: 12px;
+  max-width: 400px;
   width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
   text-align: center;
 }
 
 .modal-content img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
   margin-bottom: 10px;
 }
 
-.modal-content h2 {
-  margin-top: 0;
-}
-
-.modal-content button {
-  padding: 10px 16px;
-  margin-top: 10px;
-  font-size: 16px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.modal-content button:hover {
-  background-color: #218838;
-}
-
-.close {
+.modal-content .close {
   float: right;
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: bold;
   cursor: pointer;
 }
 
+/* Orders */
+#ordersModal ul,
 #cartItems,
 #orderList {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  max-height: 300px;
-  overflow-y: auto;
-  text-align: left;
 }
 
+#ordersModal li,
 #cartItems li,
 #orderList li {
-  padding: 6px 0;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 6px;
+  border-bottom: 1px solid #ccc;
 }
 
-#cartTotal {
-  font-weight: bold;
-}
-
-#loginStatus,
-#signupStatus {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-form input {
-  width: 90%;
-  padding: 8px;
-  margin: 5px 0;
-}
-
-form button {
-  margin-top: 10px;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
+/* Responsive */
+@media screen and (max-width: 600px) {
   header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 
   header input[type="text"] {
@@ -210,7 +182,7 @@ form button {
 
   header button {
     width: 100%;
-    font-size: 14px;
+    margin-top: 5px;
   }
 
   .product-card h3 {
@@ -219,26 +191,5 @@ form button {
 
   .product-card p {
     font-size: 14px;
-  }
-
-  .product-card button {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
-  .modal-content {
-    width: 95%;
-    padding: 15px;
-    font-size: 14px;
-  }
-
-  .modal-content h2,
-  .modal-content p {
-    font-size: 16px;
-  }
-
-  .modal-content button {
-    font-size: 14px;
-    padding: 8px 12px;
   }
 }
