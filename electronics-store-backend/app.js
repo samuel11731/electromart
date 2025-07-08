@@ -1,10 +1,11 @@
-const express = require('express');
+ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
 const productRoutes = require('./routes/productRoutes');
-const authRoutes = require('./routes/authRoutes'); // ✅ Auth route
+const authRoutes = require('./routes/authRoutes');
+const orderRoutes = require('./routes/orderRoutes'); // ✅ Order routes
 
 const app = express();
 
@@ -19,10 +20,12 @@ console.log("🔍 MONGODB_URI:", process.env.MONGODB_URI);
 app.get('/', (req, res) => {
   res.send('Electronics Store Backend is running ✅');
 });
-app.use('/api/products', productRoutes);
-app.use('/api/auth', authRoutes); // ✅ Auth route
 
-// MongoDB Connection (⬅️ cleaned)
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes); // ✅ Mount order routes
+
+// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
@@ -31,7 +34,7 @@ mongoose.connect(process.env.MONGODB_URI)
     console.error('❌ MongoDB Connection Error:', err);
   });
 
-// Server Start
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);

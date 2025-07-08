@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   user: {
-    type: String, // later change to ObjectId if using login users
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // references the User model
     required: true
   },
   items: [
     {
-      productId: String,
       name: String,
       price: Number,
       quantity: {
@@ -16,7 +16,10 @@ const orderSchema = new mongoose.Schema({
       }
     }
   ],
-  totalAmount: Number,
+  totalAmount: {
+    type: Number,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

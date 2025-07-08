@@ -11,9 +11,7 @@ window.onload = async () => {
   if (token && username) {
     currentUser = { username };
     document.getElementById("loginBtn").textContent = `Logged in as ${username}`;
-    document.getElementById("loginBtn").disabled = true;
     document.getElementById("logoutBtn").style.display = "inline-block";
-    document.getElementById("userStatus").textContent = `Logged in as ${username}`;
   }
 
   try {
@@ -48,7 +46,7 @@ window.onload = async () => {
   }
 };
 
-// Close product modal
+// Modal close
 document.getElementById("closeModal").onclick = () => {
   document.getElementById("productModal").style.display = "none";
 };
@@ -61,7 +59,7 @@ function addToCartFromModal() {
   }
 
   if (selectedProduct) {
-    cart.push(selectedProduct);
+    cart.push({ ...selectedProduct, quantity: 1 });
     document.getElementById("cartCount").textContent = cart.length;
     alert(`${selectedProduct.name} added to cart!`);
   }
@@ -70,7 +68,7 @@ function addToCartFromModal() {
 // Show cart
 function showCart() {
   if (!localStorage.getItem("token")) {
-    showLogin("Please log in before viewing your cart.");
+    showLogin("Please log in to view your cart.");
     return;
   }
 
@@ -95,33 +93,65 @@ function showCart() {
   document.getElementById("cartModal").style.display = "flex";
 }
 
-// Close cart
 function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-// Checkout
-function checkoutCart() {
+// ✅ Checkout with order saving
+async function checkoutCart() {
   if (cart.length === 0) {
     alert("Your cart is empty.");
     return;
   }
 
-  document.getElementById("cartModal").style.display = "none";
-  document.getElementById("thankYouModal").style.display = "flex";
+  const token = localStorage.getItem("token");
+  if (!token) {
+    showLogin("Please log in to place your order.");
+    return;
+  }
 
-  cart = [];
-  document.getElementById("cartCount").textContent = "0";
-  document.getElementById("cartItems").innerHTML = "";
-  document.getElementById("cartTotal").textContent = "0.00";
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  try {
+    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        items: cart.map(item => ({
+          productId: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity || 1
+        })),
+        totalAmount: total
+      })
+    });
+
+    if (res.ok) {
+      alert("✅ Order placed successfully!");
+      cart = [];
+      document.getElementById("cartCount").textContent = "0";
+      document.getElementById("cartItems").innerHTML = "";
+      document.getElementById("cartTotal").textContent = "0.00";
+      document.getElementById("cartModal").style.display = "none";
+      document.getElementById("thankYouModal").style.display = "flex";
+    } else {
+      const data = await res.json();
+      alert(data.error || "Failed to place order.");
+    }
+  } catch (error) {
+    alert("Server error during checkout.");
+  }
 }
 
-// Close thank you modal
 function closeThankYou() {
   document.getElementById("thankYouModal").style.display = "none";
 }
 
-// Search bar
+// Search filter
 document.getElementById("searchBar").addEventListener("input", function (e) {
   const query = e.target.value.toLowerCase();
   const productCards = document.querySelectorAll(".product-card");
@@ -138,22 +168,21 @@ function showLogin(error = "") {
   document.getElementById("loginStatus").textContent = error;
 }
 
-// Close login
+// Close login modal
 function closeLogin() {
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("loginStatus").textContent = "";
 }
 
-// Close signup
+// Close signup modal
 function closeSignup() {
   document.getElementById("signupModal").style.display = "none";
   document.getElementById("signupStatus").textContent = "";
 }
 
-// LOGIN
+// Login form
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
   const statusText = document.getElementById("loginStatus");
@@ -166,37 +195,30 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     });
 
     const data = await res.json();
-
     if (res.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.user.username);
       document.getElementById("loginBtn").textContent = `Logged in as ${data.user.username}`;
       document.getElementById("logoutBtn").style.display = "inline-block";
-      document.getElementById("userStatus").textContent = `Logged in as ${data.user.username}`;
-      document.getElementById("loginBtn").disabled = true;
       statusText.style.color = "green";
       statusText.textContent = "Login successful!";
       setTimeout(() => closeLogin(), 1000);
     } else {
       statusText.textContent = "Incorrect login. Create an account to login?";
-      if (!document.getElementById("createAccountBtn")) {
-        const signupBtn = document.createElement("button");
-        signupBtn.id = "createAccountBtn";
-        signupBtn.textContent = "Sign Up";
-        signupBtn.onclick = () => {
-          closeLogin();
-          document.getElementById("signupModal").style.display = "flex";
-        };
-        statusText.appendChild(document.createElement("br"));
-        statusText.appendChild(signupBtn);
-      }
+      const signupBtn = document.createElement("button");
+      signupBtn.textContent = "Sign Up";
+      signupBtn.onclick = () => {
+        closeLogin();
+        document.getElementById("signupModal").style.display = "flex";
+      };
+      statusText.appendChild(signupBtn);
     }
   } catch (error) {
     statusText.textContent = "Server error.";
   }
 });
 
-// SIGNUP
+// Signup form
 document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -219,8 +241,6 @@ document.getElementById("signupForm").addEventListener("submit", async function 
       localStorage.setItem("username", username);
       document.getElementById("loginBtn").textContent = `Logged in as ${username}`;
       document.getElementById("logoutBtn").style.display = "inline-block";
-      document.getElementById("userStatus").textContent = `Logged in as ${username}`;
-      document.getElementById("loginBtn").disabled = true;
       statusText.style.color = "green";
       statusText.textContent = "Signup successful!";
       setTimeout(() => closeSignup(), 1000);
@@ -232,13 +252,11 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   }
 });
 
-// LOGOUT
-function logout() {
+// Logout
+function logoutUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   document.getElementById("loginBtn").textContent = "Login";
   document.getElementById("logoutBtn").style.display = "none";
-  document.getElementById("userStatus").textContent = "";
-  document.getElementById("loginBtn").disabled = false;
   alert("You have been logged out.");
 }
