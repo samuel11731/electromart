@@ -46,12 +46,10 @@ window.onload = async () => {
   }
 };
 
-// Modal close
 document.getElementById("closeModal").onclick = () => {
   document.getElementById("productModal").style.display = "none";
 };
 
-// Add to cart
 function addToCartFromModal() {
   if (!localStorage.getItem("token")) {
     showLogin("Please log in before adding to cart.");
@@ -65,7 +63,6 @@ function addToCartFromModal() {
   }
 }
 
-// Show cart
 function showCart() {
   if (!localStorage.getItem("token")) {
     showLogin("Please log in to view your cart.");
@@ -97,7 +94,7 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-// ✅ Checkout with order saving
+// ✅ Checkout and send order to backend
 async function checkoutCart() {
   if (cart.length === 0) {
     alert("Your cart is empty.");
@@ -151,7 +148,7 @@ function closeThankYou() {
   document.getElementById("thankYouModal").style.display = "none";
 }
 
-// Search filter
+// Search
 document.getElementById("searchBar").addEventListener("input", function (e) {
   const query = e.target.value.toLowerCase();
   const productCards = document.querySelectorAll(".product-card");
@@ -162,25 +159,23 @@ document.getElementById("searchBar").addEventListener("input", function (e) {
   });
 });
 
-// Show login modal
+// Login modal
 function showLogin(error = "") {
   document.getElementById("loginModal").style.display = "flex";
   document.getElementById("loginStatus").textContent = error;
 }
 
-// Close login modal
 function closeLogin() {
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("loginStatus").textContent = "";
 }
 
-// Close signup modal
 function closeSignup() {
   document.getElementById("signupModal").style.display = "none";
   document.getElementById("signupStatus").textContent = "";
 }
 
-// Login form
+// ✅ LOGIN
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
@@ -195,6 +190,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     });
 
     const data = await res.json();
+
     if (res.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.user.username);
@@ -218,7 +214,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   }
 });
 
-// Signup form
+// ✅ SIGNUP (now uses /signup not /register)
 document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -228,7 +224,7 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   const statusText = document.getElementById("signupStatus");
 
   try {
-    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/auth/register", {
+    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password })
@@ -252,7 +248,7 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   }
 });
 
-// Logout
+// ✅ Logout
 function logoutUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
