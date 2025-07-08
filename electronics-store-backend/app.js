@@ -22,15 +22,14 @@ app.get('/', (req, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes); // ✅ Auth route
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('✅ MongoDB Connected');
-}).catch((err) => {
-  console.error('❌ MongoDB Connection Error:', err);
-});
+// MongoDB Connection (⬅️ cleaned)
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('✅ MongoDB Connected');
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB Connection Error:', err);
+  });
 
 // Server Start
 const PORT = process.env.PORT || 5000;
