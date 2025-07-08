@@ -12,13 +12,17 @@
     <div class="logo">ElectroMart</div>
     <input type="text" placeholder="Search electronics..." id="searchBar" />
     
+    <div class="auth-info">
+      <span id="userStatus" class="small-text"></span>
+      <button id="logoutBtn" onclick="logout()" class="small-button" style="display: none;">Logout</button>
+    </div>
+
     <div class="cart-icon">
       <i class="fas fa-shopping-cart"></i>
       <span id="cartCount">0</span>
     </div>
     <button onclick="showCart()" id="viewCartBtn">View Cart</button>
     <button onclick="showLogin()" id="loginBtn">Login</button>
-    <button onclick="logout()" id="logoutBtn" style="display: none;">Logout</button>
   </header>
 
   <main>
@@ -71,7 +75,7 @@
         <button type="submit">Login</button>
       </form>
       <p id="loginStatus" style="color: red;"></p>
-      <p>Don't have an account? <button onclick="showSignup()" style="color: blue; background: none; border: none; cursor: pointer;">Create one</button></p>
+      <button onclick="showSignup()">Create Account</button>
     </div>
   </div>
 

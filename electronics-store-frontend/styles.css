@@ -20,6 +20,7 @@ header {
   color: white;
   padding: 10px 20px;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .logo {
@@ -44,15 +45,28 @@ input[type="text"] {
   margin-right: 10px;
 }
 
-#viewCartBtn, #loginBtn, #logoutBtn {
+#viewCartBtn,
+#loginBtn,
+#logoutBtn {
   background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 14px;
   border-radius: 6px;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
-  margin-left: 8px;
+}
+
+#logoutBtn {
+  background-color: #dc3545;
+  display: none;
+}
+
+#userStatus {
+  color: lightgreen;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 /* Main */
@@ -96,7 +110,7 @@ main {
   margin-top: 8px;
 }
 
-/* Modals (Product, Cart, Thank You, Login, Signup) */
+/* Modals */
 .modal {
   display: none;
   position: fixed;
@@ -135,7 +149,7 @@ main {
   color: #444;
 }
 
-/* Cart Items */
+/* Cart List */
 #cartItems {
   list-style-type: none;
   padding: 0;
@@ -148,7 +162,7 @@ main {
   border-bottom: 1px solid #ccc;
 }
 
-/* Modal Buttons */
+/* Buttons inside modal */
 .modal-content button {
   background-color: #28a745;
   color: white;
@@ -164,15 +178,14 @@ main {
   background-color: #218838;
 }
 
-/* Input Fields in Forms */
-.modal-content input {
-  padding: 10px;
-  width: 90%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Status text */
+#loginStatus,
+#signupStatus {
+  margin-top: 10px;
+  color: red;
 }
 
-/* Responsive */
+/* Mobile Responsive */
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -189,5 +202,12 @@ main {
   #logoutBtn {
     width: 100%;
     margin-top: 10px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  #userStatus {
+    font-size: 12px;
+    margin-top: 5px;
   }
 }
