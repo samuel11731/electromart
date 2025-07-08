@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 
-const JWT_SECRET = 'your_jwt_secret_key'; // You can also use process.env.JWT_SECRET
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret'; // ✅ Use .env if available
 
-// Register
-router.post('/register', async (req, res) => {
+// ✅ SIGNUP (register renamed to signup)
+router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -23,13 +23,24 @@ router.post('/register', async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    res.status(201).json({ message: 'User created', user: savedUser });
+
+    const token = jwt.sign({ userId: savedUser._id }, JWT_SECRET, { expiresIn: '1d' });
+
+    res.status(201).json({ 
+      message: 'User created',
+      token,
+      user: {
+        id: savedUser._id,
+        username: savedUser.username,
+        email: savedUser.email
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// Login
+// ✅ LOGIN
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -42,7 +53,14 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1d' });
 
-    res.json({ token, user: { id: user._id, username: user.username, email: user.email } });
+    res.json({ 
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
