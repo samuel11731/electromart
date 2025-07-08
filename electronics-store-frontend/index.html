@@ -1,3 +1,4 @@
+<!-- Replace your current HTML with this -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,18 +12,16 @@
   <header>
     <div class="logo">ElectroMart</div>
     <input type="text" placeholder="Search electronics..." id="searchBar" />
-    
-    <div class="auth-info">
-      <span id="userStatus" class="small-text"></span>
-      <button id="logoutBtn" onclick="logout()" class="small-button" style="display: none;">Logout</button>
-    </div>
 
     <div class="cart-icon">
       <i class="fas fa-shopping-cart"></i>
       <span id="cartCount">0</span>
     </div>
+
     <button onclick="showCart()" id="viewCartBtn">View Cart</button>
+    <button onclick="showOrders()" id="viewOrdersBtn">My Orders</button>
     <button onclick="showLogin()" id="loginBtn">Login</button>
+    <button onclick="logoutUser()" id="logoutBtn" style="display:none;">Logout</button>
   </header>
 
   <main>
@@ -64,7 +63,16 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
+  <!-- Orders Modal -->
+  <div class="modal" id="ordersModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <span class="close" onclick="closeOrders()">&times;</span>
+      <h2>My Orders</h2>
+      <div id="ordersList"></div>
+    </div>
+  </div>
+
+  <!-- Login & Signup Modals -->
   <div class="modal" id="loginModal">
     <div class="modal-content">
       <span class="close" onclick="closeLogin()">&times;</span>
@@ -73,13 +81,11 @@
         <input type="email" id="loginEmail" placeholder="Email" required /><br /><br />
         <input type="password" id="loginPassword" placeholder="Password" required /><br /><br />
         <button type="submit">Login</button>
+        <p id="loginStatus" style="color:red;"></p>
       </form>
-      <p id="loginStatus" style="color: red;"></p>
-      <button onclick="showSignup()">Create Account</button>
     </div>
   </div>
 
-  <!-- Signup Modal -->
   <div class="modal" id="signupModal">
     <div class="modal-content">
       <span class="close" onclick="closeSignup()">&times;</span>
@@ -89,8 +95,8 @@
         <input type="email" id="signupEmail" placeholder="Email" required /><br /><br />
         <input type="password" id="signupPassword" placeholder="Password" required /><br /><br />
         <button type="submit">Sign Up</button>
+        <p id="signupStatus" style="color:red;"></p>
       </form>
-      <p id="signupStatus" style="color: red;"></p>
     </div>
   </div>
 

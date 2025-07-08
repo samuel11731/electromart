@@ -2,7 +2,6 @@ let cart = [];
 let selectedProduct = null;
 let currentUser = null;
 
-// Load products
 window.onload = async () => {
   const productGrid = document.getElementById("productGrid");
   const token = localStorage.getItem("token");
@@ -12,6 +11,7 @@ window.onload = async () => {
     currentUser = { username };
     document.getElementById("loginBtn").textContent = `Logged in as ${username}`;
     document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("myOrdersBtn").style.display = "inline-block";
   }
 
   try {
@@ -46,15 +46,14 @@ window.onload = async () => {
   }
 };
 
+// Modal close
 document.getElementById("closeModal").onclick = () => {
   document.getElementById("productModal").style.display = "none";
 };
 
+// Add to cart
 function addToCartFromModal() {
-  if (!localStorage.getItem("token")) {
-    showLogin("Please log in before adding to cart.");
-    return;
-  }
+  if (!localStorage.getItem("token")) return showLogin("Please log in before adding to cart.");
 
   if (selectedProduct) {
     cart.push({ ...selectedProduct, quantity: 1 });
@@ -63,11 +62,9 @@ function addToCartFromModal() {
   }
 }
 
+// Show cart
 function showCart() {
-  if (!localStorage.getItem("token")) {
-    showLogin("Please log in to view your cart.");
-    return;
-  }
+  if (!localStorage.getItem("token")) return showLogin("Please log in to view your cart.");
 
   const cartItemsList = document.getElementById("cartItems");
   const cartTotalSpan = document.getElementById("cartTotal");
@@ -94,18 +91,12 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-// ✅ Checkout and send order to backend
+// ✅ Checkout with order saving
 async function checkoutCart() {
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
+  if (cart.length === 0) return alert("Your cart is empty.");
 
   const token = localStorage.getItem("token");
-  if (!token) {
-    showLogin("Please log in to place your order.");
-    return;
-  }
+  if (!token) return showLogin("Please log in to place your order.");
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
@@ -148,7 +139,7 @@ function closeThankYou() {
   document.getElementById("thankYouModal").style.display = "none";
 }
 
-// Search
+// Search filter
 document.getElementById("searchBar").addEventListener("input", function (e) {
   const query = e.target.value.toLowerCase();
   const productCards = document.querySelectorAll(".product-card");
@@ -159,7 +150,7 @@ document.getElementById("searchBar").addEventListener("input", function (e) {
   });
 });
 
-// Login modal
+// Show login modal
 function showLogin(error = "") {
   document.getElementById("loginModal").style.display = "flex";
   document.getElementById("loginStatus").textContent = error;
@@ -175,7 +166,6 @@ function closeSignup() {
   document.getElementById("signupStatus").textContent = "";
 }
 
-// ✅ LOGIN
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
@@ -190,12 +180,12 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     });
 
     const data = await res.json();
-
     if (res.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.user.username);
       document.getElementById("loginBtn").textContent = `Logged in as ${data.user.username}`;
       document.getElementById("logoutBtn").style.display = "inline-block";
+      document.getElementById("myOrdersBtn").style.display = "inline-block";
       statusText.style.color = "green";
       statusText.textContent = "Login successful!";
       setTimeout(() => closeLogin(), 1000);
@@ -214,7 +204,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   }
 });
 
-// ✅ SIGNUP (now uses /signup not /register)
 document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -237,6 +226,7 @@ document.getElementById("signupForm").addEventListener("submit", async function 
       localStorage.setItem("username", username);
       document.getElementById("loginBtn").textContent = `Logged in as ${username}`;
       document.getElementById("logoutBtn").style.display = "inline-block";
+      document.getElementById("myOrdersBtn").style.display = "inline-block";
       statusText.style.color = "green";
       statusText.textContent = "Signup successful!";
       setTimeout(() => closeSignup(), 1000);
@@ -248,11 +238,47 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   }
 });
 
-// ✅ Logout
+// ✅ My Orders
+document.getElementById("myOrdersBtn").addEventListener("click", async () => {
+  const token = localStorage.getItem("token");
+  if (!token) return showLogin("Please log in to view your orders.");
+
+  const orderList = document.getElementById("orderList");
+  orderList.innerHTML = "<li>Loading...</li>";
+  document.getElementById("ordersModal").style.display = "flex";
+
+  try {
+    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/orders", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const orders = await res.json();
+
+    if (Array.isArray(orders) && orders.length > 0) {
+      orderList.innerHTML = "";
+      orders.forEach(order => {
+        const li = document.createElement("li");
+        const date = new Date(order.createdAt).toLocaleString();
+        li.innerHTML = `<strong>Date:</strong> ${date}<br/><strong>Total:</strong> $${order.totalAmount.toFixed(2)}<br/><strong>Items:</strong> ${order.items.map(i => i.name).join(", ")}`;
+        orderList.appendChild(li);
+      });
+    } else {
+      orderList.innerHTML = "<li>No past orders.</li>";
+    }
+  } catch (error) {
+    orderList.innerHTML = "<li>Error fetching orders.</li>";
+  }
+});
+
+function closeOrdersModal() {
+  document.getElementById("ordersModal").style.display = "none";
+}
+
 function logoutUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   document.getElementById("loginBtn").textContent = "Login";
   document.getElementById("logoutBtn").style.display = "none";
+  document.getElementById("myOrdersBtn").style.display = "none";
   alert("You have been logged out.");
 }
