@@ -27,39 +27,32 @@ header {
   font-weight: bold;
 }
 
-#searchBar {
+input[type="text"] {
   width: 40%;
   padding: 8px;
   border-radius: 4px;
   border: none;
 }
 
-#loginBtn,
-#viewCartBtn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
+/* Cart Icon & Buttons */
 .cart-icon {
   font-size: 1.2em;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-right: 10px;
 }
 
-/* "Logged in as ..." */
-#userStatus {
-  font-weight: bold;
+#viewCartBtn, #loginBtn, #logoutBtn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
   font-size: 15px;
-  color: lightgreen;
-  margin-left: 10px;
+  cursor: pointer;
+  margin-left: 8px;
 }
 
 /* Main */
@@ -103,7 +96,7 @@ main {
   margin-top: 8px;
 }
 
-/* Modal Styles */
+/* Modals (Product, Cart, Thank You, Login, Signup) */
 .modal {
   display: none;
   position: fixed;
@@ -142,6 +135,20 @@ main {
   color: #444;
 }
 
+/* Cart Items */
+#cartItems {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+#cartItems li {
+  padding: 6px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Modal Buttons */
 .modal-content button {
   background-color: #28a745;
   color: white;
@@ -157,33 +164,12 @@ main {
   background-color: #218838;
 }
 
-/* Cart */
-#cartItems {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-#cartItems li {
-  padding: 6px 0;
-  border-bottom: 1px solid #ccc;
-}
-
-/* Login & Signup Form Inputs */
+/* Input Fields in Forms */
 .modal-content input {
-  width: 90%;
   padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #aaa;
+  width: 90%;
+  border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-/* Status message */
-#loginStatus,
-#signupStatus {
-  margin-top: 10px;
-  font-size: 14px;
 }
 
 /* Responsive */
@@ -193,13 +179,14 @@ main {
     align-items: flex-start;
   }
 
-  #searchBar {
+  input[type="text"] {
     width: 100%;
     margin: 10px 0;
   }
 
+  #viewCartBtn,
   #loginBtn,
-  #viewCartBtn {
+  #logoutBtn {
     width: 100%;
     margin-top: 10px;
   }
