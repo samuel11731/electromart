@@ -13,7 +13,7 @@ router.post('/', authenticate, async (req, res) => {
     }
 
     const newOrder = new Order({
-      user: req.user.userId, // ✅ access user ID from decoded token
+      user: req.user.userId,
       items,
       totalAmount
     });
