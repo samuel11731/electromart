@@ -1,38 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
-const authenticate = require('../middleware/auth');
+const { authenticateUser, requireAdmin } = require('../middleware/authmiddleware');
 
-// POST /api/orders - Save a new order (user must be logged in)
-router.post('/', authenticate, async (req, res) => {
+// Logged-in user placing order
+router.post('/', authenticateUser, async (req, res) => {
+  const { items, totalAmount } = req.body;
+  if (!items || items.length === 0)
+    return res.status(400).json({ error: 'Cart is empty.' });
+
   try {
-    const { items, totalAmount } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ error: "Cart is empty." });
-    }
-
-    const newOrder = new Order({
+    const order = new Order({
       user: req.user.userId,
       items,
       totalAmount
     });
-
-    await newOrder.save();
-    res.status(201).json({ message: "Order placed successfully!" });
+    await order.save();
+    res.status(201).json({ message: 'Order placed successfully!' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to save order" });
+    res.status(500).json({ error: 'Failed to save order' });
   }
 });
 
-// GET /api/orders - Get orders for the logged-in user
-router.get('/', authenticate, async (req, res) => {
+// Get orders of logged-in user
+router.get('/', authenticateUser, async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user.userId }).sort({ createdAt: -1 });
     res.json(orders);
+  } catch {
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
+// ✅ Admin: Get all orders
+router.get('/admin', authenticateUser, requireAdmin, async (req, res) => {
+  try {
+    const allOrders = await Order.find().populate('user', 'username email').sort({ createdAt: -1 });
+    res.json(allOrders);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch orders" });
+    res.status(500).json({ error: 'Failed to fetch all orders' });
   }
 });
 

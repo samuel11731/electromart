@@ -1,11 +1,12 @@
- const express = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
-const orderRoutes = require('./routes/orderRoutes'); // ✅ Order routes
+const orderRoutes = require('./routes/orderRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // ✅ Add this line
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/orders', orderRoutes); // ✅ Mount order routes
+app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes); // ✅ Mount admin-only routes here
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
