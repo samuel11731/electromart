@@ -14,7 +14,11 @@ window.onload = async () => {
     document.getElementById("myOrdersBtn").style.display = "inline-block";
   }
 
-  // ✅ Attach event listeners after DOM is ready
+  // ✅ Attach event listeners
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    showLogin();
+  });
+  document.getElementById("logoutBtn").addEventListener("click", logoutUser);
   document.getElementById("loginForm").addEventListener("submit", handleLogin);
   document.getElementById("signupForm").addEventListener("submit", handleSignup);
   document.getElementById("myOrdersBtn").addEventListener("click", showMyOrders);
@@ -23,7 +27,6 @@ window.onload = async () => {
     document.getElementById("productModal").style.display = "none";
   };
 
-  // ✅ Load and display products
   try {
     const response = await fetch("https://electromart-backend-hgrv.onrender.com/api/products");
     if (!response.ok) throw new Error("Failed to load products");
@@ -35,7 +38,7 @@ window.onload = async () => {
   }
 };
 
-// ✅ Render one product card
+// ✅ Render product card
 function renderProductCard(product) {
   const productGrid = document.getElementById("productGrid");
 
@@ -60,7 +63,7 @@ function renderProductCard(product) {
   productGrid.appendChild(card);
 }
 
-// ✅ Search filtering
+// ✅ Search filter
 function handleSearch(e) {
   const query = e.target.value.toLowerCase();
   const productCards = document.querySelectorAll(".product-card");
@@ -81,7 +84,7 @@ function addToCartFromModal() {
   }
 }
 
-// ✅ Show cart modal
+// ✅ Show cart
 function showCart() {
   if (!localStorage.getItem("token")) return showLogin("Please log in to view your cart.");
   const cartItemsList = document.getElementById("cartItems");
@@ -109,7 +112,7 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-// ✅ Checkout and save order
+// ✅ Checkout
 async function checkoutCart() {
   if (cart.length === 0) return alert("Your cart is empty.");
   const token = localStorage.getItem("token");
@@ -156,7 +159,7 @@ function closeThankYou() {
   document.getElementById("thankYouModal").style.display = "none";
 }
 
-// ✅ Show login modal
+// ✅ Login modal
 function showLogin(error = "") {
   document.getElementById("loginModal").style.display = "flex";
   document.getElementById("loginStatus").textContent = error;
@@ -244,7 +247,7 @@ async function handleSignup(e) {
   }
 }
 
-// ✅ Show orders
+// ✅ Order history
 async function showMyOrders() {
   const token = localStorage.getItem("token");
   if (!token) return showLogin("Please log in to view your orders.");
@@ -280,6 +283,7 @@ function closeOrdersModal() {
   document.getElementById("ordersModal").style.display = "none";
 }
 
+// ✅ Logout
 function logoutUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");

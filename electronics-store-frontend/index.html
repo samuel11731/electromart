@@ -13,11 +13,11 @@
     <input type="text" placeholder="Search electronics..." id="searchBar" />
 
     <div class="action-box">
-      <span id="loginBtn">Login</span>
-      <span id="logoutBtn" style="display: none;">Logout</span>
-      <span id="myOrdersBtn" style="display: none;">My Orders</span>
-      <span onclick="showCart()" id="viewCartBtn">View Cart</span>
-      <span id="cartIcon"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></span>
+      <button onclick="showCart()" id="viewCartBtn" class="blue-btn">View Cart</button>
+      <button id="myOrdersBtn" style="display: none;" class="green-btn">My Orders</button>
+      <button id="loginBtn" onclick="showLogin()" class="blue-btn">Login</button>
+      <button id="logoutBtn" onclick="logoutUser()" style="display: none;" class="red-btn">Logout</button>
+      <div id="cartIcon"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></div>
     </div>
   </header>
 
@@ -101,4 +101,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-

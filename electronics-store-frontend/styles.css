@@ -167,3 +167,52 @@ main {
         max-width: 90%;
     }
 }
+.auth-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 5px 10px;
+  background-color: #f1f5f5;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.auth-buttons button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.blue-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.green-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.red-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.auth-buttons button:hover {
+  opacity: 0.9;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .auth-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .auth-buttons button {
+    width: 100%;
+  }
+}
