@@ -166,6 +166,154 @@ main {
     .modal-content {
         max-width: 90%;
     }
+}.action-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #e6f0ec;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.action-box span {
+  background-color: #0e7e4c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.action-box span:hover {
+  background-color: #08643a;
+}/* ======================
+   ADMIN DASHBOARD MODAL
+========================= */
+
+#adminBtn {
+  background-color: rgb(5, 106, 5);
+  color: white;
+  padding: 6px 12px;
+  margin-left: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  display: none;
+}
+
+#adminBtn:hover {
+  background-color: rgb(4, 88, 4);
+}
+
+#adminOrdersModal .modal-content {
+  max-width: 700px;
+  height: 80vh;
+  overflow-y: auto;
+  background-color: #fefefe;
+  border-left: 8px solid green;
+}
+
+#adminOrderList {
+  padding: 10px;
+}
+
+#adminOrderList li {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+  font-size: 0.9em;
+}/* Admin Dashboard Modal */
+#adminOrdersModal .modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  max-width: 700px;
+  background-color: #f4fdf4;
+  border: 2px solid #2b7a2b;
+  padding: 20px;
+}
+
+#adminOrdersModal h2 {
+  text-align: center;
+ /* ====== ADMIN DASHBOARD ====== */
+#adminDashboardBtn {
+  background-color: #28a745; /* Green */
+  color: white;
+  padding: 8px 12px;
+  margin-left: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+#adminDashboardBtn:hover {
+  background-color: #218838;
+}
+
+/* Admin Modal */
+#adminOrdersModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+#adminOrdersModal .modal-content {
+  background: white;
+  padding: 20px;
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow-y: auto;
+  border-radius: 6px;
+}
+
+.admin-order {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  font-size: 0.95em;
+}
+
+.admin-order strong {
+  color: #333;
+} color: #2b7a2b;
+}
+
+.admin-order {
+  border: 1px solid #ccc;
+  border-left: 5px solid #2b7a2b;
+  padding: 15px;
+  margin: 10px 0;
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.admin-order strong {
+  color: #333;
+}
+
+.admin-order small {
+  font-size: 0.85em;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  #adminOrdersModal .modal-content {
+    width: 95%;
+    font-size: 0.9em;
+  }
+
+  .admin-order {
+    padding: 10px;
+  }
 }
 .auth-buttons {
   display: flex;
@@ -215,4 +363,28 @@ main {
   .auth-buttons button {
     width: 100%;
   }
+}
+/* Admin & Action Buttons */
+.action-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  background: #e6f4ea;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.action-box span {
+  padding: 6px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-box span:hover {
+  background-color: #0056b3;
 }

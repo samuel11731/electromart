@@ -3,7 +3,7 @@ const router = express.Router();
 const Order = require('../models/Order');
 const { authenticateUser, requireAdmin } = require('../middleware/auth');
 
-// Logged-in user placing order
+// Create a new order
 router.post('/', authenticateUser, async (req, res) => {
   const { items, totalAmount } = req.body;
   if (!items || items.length === 0)
@@ -17,12 +17,12 @@ router.post('/', authenticateUser, async (req, res) => {
     });
     await order.save();
     res.status(201).json({ message: 'Order placed successfully!' });
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Failed to save order' });
   }
 });
 
-// Get orders of logged-in user
+// Get current user's orders
 router.get('/', authenticateUser, async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user.userId }).sort({ createdAt: -1 });
@@ -32,13 +32,15 @@ router.get('/', authenticateUser, async (req, res) => {
   }
 });
 
-// ✅ Admin: Get all orders
-router.get('/admin', authenticateUser, requireAdmin, async (req, res) => {
+// ✅ Admin: Get all orders with username and email
+router.get('/admin/orders', authenticateUser, requireAdmin, async (req, res) => {
   try {
-    const allOrders = await Order.find().populate('user', 'username email').sort({ createdAt: -1 });
+    const allOrders = await Order.find()
+      .populate('user', 'username email')
+      .sort({ createdAt: -1 });
     res.json(allOrders);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch all orders' });
+  } catch {
+    res.status(500).json({ error: 'Failed to fetch admin orders' });
   }
 });
 

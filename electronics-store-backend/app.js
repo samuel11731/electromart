@@ -21,19 +21,15 @@ app.get('/', (req, res) => {
   res.send('Electronics Store Backend is running ✅');
 });
 
-// API routes
+// Routes
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ MongoDB Connected');
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB Connection Error:', err);
-  });
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // Start server
 const PORT = process.env.PORT || 5000;

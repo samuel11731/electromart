@@ -1,3 +1,4 @@
+<!-- Save as index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,14 +11,14 @@
 <body>
   <header>
     <div class="logo">ElectroMart</div>
-    <input type="text" placeholder="Search electronics..." id="searchBar" />
-
+    <input type="text" id="searchBar" placeholder="Search electronics..." />
     <div class="action-box">
-      <button onclick="showCart()" id="viewCartBtn" class="blue-btn">View Cart</button>
-      <button id="myOrdersBtn" style="display: none;" class="green-btn">My Orders</button>
-      <button id="loginBtn" onclick="showLogin()" class="blue-btn">Login</button>
-      <button id="logoutBtn" onclick="logoutUser()" style="display: none;" class="red-btn">Logout</button>
-      <div id="cartIcon"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></div>
+      <span id="loginBtn">Login</span>
+      <span id="logoutBtn" style="display:none;">Logout</span>
+      <span id="myOrdersBtn" style="display:none;">My Orders</span>
+      <span id="adminBtn" style="display:none;">Admin Dashboard</span>
+      <span onclick="showCart()" id="viewCartBtn">View Cart</span>
+      <span id="cartIcon"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></span>
     </div>
   </header>
 
@@ -26,7 +27,7 @@
     <div id="productGrid" class="product-grid"></div>
   </main>
 
-  <!-- Product Modal -->
+  <!-- Modals (Product, Cart, Thank You, Orders, Login, Signup) -->
   <div class="modal" id="productModal">
     <div class="modal-content">
       <span class="close" id="closeModal">&times;</span>
@@ -34,13 +35,10 @@
       <h2 id="modalName"></h2>
       <p id="modalDescription"></p>
       <p><strong>Price:</strong> $<span id="modalPrice"></span></p>
-      <button onclick="addToCartFromModal()">
-        <i class="fas fa-shopping-cart"></i> Add to Cart
-      </button>
+      <button onclick="addToCartFromModal()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
     </div>
   </div>
 
-  <!-- Cart Modal -->
   <div class="modal" id="cartModal">
     <div class="modal-content">
       <span class="close" onclick="closeCart()">&times;</span>
@@ -51,7 +49,6 @@
     </div>
   </div>
 
-  <!-- Thank You Modal -->
   <div class="modal" id="thankYouModal">
     <div class="modal-content">
       <h2>✅ Thank you for your order!</h2>
@@ -60,16 +57,23 @@
     </div>
   </div>
 
-  <!-- Orders Modal -->
   <div class="modal" id="ordersModal">
-    <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-content">
       <span class="close" onclick="closeOrdersModal()">&times;</span>
       <h2>My Orders</h2>
       <ul id="orderList"></ul>
     </div>
   </div>
 
-  <!-- Login Modal -->
+  <!-- ✅ Admin Orders Modal -->
+  <div class="modal" id="adminOrdersModal">
+    <div class="modal-content" style="max-width:600px">
+      <span class="close" onclick="closeAdminOrders()">&times;</span>
+      <h2>All Orders (Admin)</h2>
+      <ul id="adminOrderList"></ul>
+    </div>
+  </div>
+
   <div class="modal" id="loginModal">
     <div class="modal-content">
       <span class="close" onclick="closeLogin()">&times;</span>
@@ -83,7 +87,6 @@
     </div>
   </div>
 
-  <!-- Signup Modal -->
   <div class="modal" id="signupModal">
     <div class="modal-content">
       <span class="close" onclick="closeSignup()">&times;</span>

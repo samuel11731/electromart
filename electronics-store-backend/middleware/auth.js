@@ -1,29 +1,34 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
-const authenticateUser = async (req, res, next) => {
+function authenticateUser(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer '))
-    return res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ error: 'Unauthorized' });
 
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.userId);
-    if (!user) return res.status(401).json({ message: 'User not found' });
-
-    req.user = { userId: user._id, isAdmin: user.isAdmin || false };
+    req.user = decoded;
     next();
-  } catch (err) {
-    res.status(401).json({ message: 'Invalid token' });
+  } catch {
+    res.status(403).json({ error: 'Invalid token' });
   }
-};
+}
 
-const requireAdmin = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin)
-    return res.status(403).json({ message: 'Access denied. Admins only.' });
-  next();
-};
+async function requireAdmin(req, res, next) {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (user && user.isAdmin) {
+      next();
+    } else {
+      res.status(403).json({ error: 'Admin access required' });
+    }
+  } catch {
+    res.status(500).json({ error: 'Server error checking admin' });
+  }
+}
 
 module.exports = { authenticateUser, requireAdmin };
