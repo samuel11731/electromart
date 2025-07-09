@@ -1,6 +1,3 @@
-// 👇 Entire code remains the same, only showAdminOrders() is updated
-
-// (Same declarations and setup)
 let cart = [];
 let selectedProduct = null;
 let currentUser = null;
@@ -21,7 +18,6 @@ window.onload = async () => {
     }
   }
 
-  // Event listeners
   document.getElementById("loginBtn").addEventListener("click", () => showLogin());
   document.getElementById("logoutBtn").addEventListener("click", logoutUser);
   document.getElementById("loginForm").addEventListener("submit", handleLogin);
@@ -265,7 +261,7 @@ async function showAdminOrders() {
   document.getElementById("adminOrdersModal").style.display = "flex";
 
   try {
-    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/orders/admin", {
+    const res = await fetch("https://electromart-backend-hgrv.onrender.com/api/orders/admin/orders", {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -293,10 +289,6 @@ function closeAdminOrders() {
 
 function closeOrdersModal() {
   document.getElementById("ordersModal").style.display = "none";
-}
-
-function closeAdminOrdersModal() {
-  document.getElementById("adminOrdersModal").style.display = "none";
 }
 
 function logoutUser() {
