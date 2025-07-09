@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret'; // ✅ Use .env if available
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
-// ✅ SIGNUP (register renamed to signup)
+// ✅ SIGNUP
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -26,13 +26,14 @@ router.post('/signup', async (req, res) => {
 
     const token = jwt.sign({ userId: savedUser._id }, JWT_SECRET, { expiresIn: '1d' });
 
-    res.status(201).json({ 
+    res.status(201).json({
       message: 'User created',
       token,
       user: {
         id: savedUser._id,
         username: savedUser.username,
-        email: savedUser.email
+        email: savedUser.email,
+        isAdmin: savedUser.isAdmin
       }
     });
   } catch (err) {
@@ -53,16 +54,39 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1d' });
 
-    res.json({ 
+    res.json({
       token,
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        isAdmin: user.isAdmin || false
       }
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// ✅ MAKE ADMIN (TEMPORARY TOOL)
+router.post('/make-admin', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { isAdmin: true } },
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({
+      message: `✅ ${email} has been promoted to admin.`,
+      user
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error promoting user', error: err.message });
   }
 });
 

@@ -6,7 +6,6 @@ require('dotenv').config();
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const adminRoutes = require('./routes/adminRoutes'); // ✅ Add this line
 
 const app = express();
 
@@ -17,17 +16,17 @@ app.use(express.json());
 // Debug
 console.log("🔍 MONGODB_URI:", process.env.MONGODB_URI);
 
-// Routes
+// Base route
 app.get('/', (req, res) => {
   res.send('Electronics Store Backend is running ✅');
 });
 
+// API routes
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/admin', adminRoutes); // ✅ Mount admin-only routes here
 
-// MongoDB Connection
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
@@ -36,7 +35,7 @@ mongoose.connect(process.env.MONGODB_URI)
     console.error('❌ MongoDB Connection Error:', err);
   });
 
-// Start Server
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
